@@ -43,27 +43,22 @@ Run the deploy command with the first parameter as the vhost. eg. `deploy alista
 Walkthrough of the deployment process:
 
 1. Go to `/var/www/vhosts/<vhost>`
-
     - Fail if the directory does not exist
 
 2. Check where `httpdocs` points to
-   
    - Fail if `httpdocs` is not a symlink
    - Fail if `httpdocs` is not pointing to a directory within `current`
 
 3. List all directories in `current`
-    
     - Fail if list is not availble
 
 4. Is the list of directories in `current` is less than the number of deploys to keep (configurable)?
 
    4.1. __Yes:__ Create directory called `<timestamp>` in `current`. Clone the repository from github into the new directory.
-              
       - Fail if unable to create directory in `current`
       - Fail if unable to clone repository
 
-   4.2. __No:__: Look for the last failed deploy (check directory for "-rolledback") or then the oldest deploy using the directory name timestamp. Rename the selected directory to `<timestamp>`.
-
+   4.2. __No:__ Look for the last failed deploy (check directory for "-rolledback") or then the oldest deploy using the directory name timestamp. Rename the selected directory to `<timestamp>`.
       - Fail if unable to rename directory in current/
 
 5. Checkout the latest master code (or a commit id if provided) from origin.
@@ -84,34 +79,27 @@ deploy <vhost> rollback <?timestamp>
 Walkthrough of the rollback process:
 
 1. Go to `/var/www/vhosts/<vhost>`
-
     - Fail if the directory does not exist
 
 2. Check where `httpdocs` points to
-   
    - Fail if `httpdocs` is not a symlink
    - Fail if `httpdocs` is not pointing to a directory within `current`
 
 3. List all directories in `current`
-    
     - Fail if list is not availble
 
 4. Has the rollback provided a specific `<timestamp>` to roll back to?
 
    4.1. __Yes:__ Check that directory `<timestamp>` is in `current`.
-              
       - Fail if directory `<timestamp>` is not in `current`
 
    4.2. __No:__: Use list of directories in `current` to get previous deploy using the directory name timestamp
-
       - Fail if no previous deployments.
 
 
 5. Switch `httpdocs` symlink to point to the new deployed code.
 
 6. Rename last deploy directory as bad by adding "-rolledback" to directory name,
-
-
 
 
 ## Configs
@@ -128,3 +116,4 @@ Walkthrough of the rollback process:
    `git config --global user.name`
  * Repository will be cloned from Github
  * For automatic deploy, password has been saved or public key has been set
+
